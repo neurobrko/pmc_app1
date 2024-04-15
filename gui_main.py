@@ -31,14 +31,16 @@ window = sg.Window(
 
 while True:
     event, values = window.read(timeout=200)
-    window["clock"].update(value=time.strftime("%b %d, %Y %H:%M:%S"))
     match event:
         case "Add":
             todos = functions.get_todos()
-            new_todo = values["todo"] + "\n"
-            todos.append(new_todo)
-            functions.write_todos(todos)
-            window["todos"].update(values=todos)
+            if values["todo"] == "":
+                sg.popup("Type in a to-do.")
+            else:
+                new_todo = values["todo"] + "\n"
+                todos.append(new_todo)
+                functions.write_todos(todos)
+                window["todos"].update(values=todos)
         case "Edit":
             try:
                 todo_to_edit = values["todos"][0]
@@ -64,6 +66,8 @@ while True:
             break
         case "todos":
             window["todo"].update(value=values["todos"][0].strip("\n"))
+        case "__TIMEOUT__":
+            window["clock"].update(value=time.strftime("%b %d, %Y %H:%M:%S"))
         case sg.WIN_CLOSED:
             break
 window.close()
