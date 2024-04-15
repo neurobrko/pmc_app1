@@ -2,19 +2,32 @@ import functions
 import PySimpleGUI as sg
 import time
 
-sg.theme("DarkBlue18")
+sg.theme("DarkGrey6")
 
 sg_font = ("Ubuntu", 12)
+popup_title = "Warning"
 
 clock = sg.Text("", key="clock")
 label = sg.Text("Type in a to-do:")
 input_box = sg.InputText(tooltip="Enter todo...", key="todo")
-add_button = sg.Button("Add")
+add_button = sg.Button(
+    size=2,
+    image_source="button_images/add.png",
+    mouseover_colors="LightBlue2",
+    tooltip="Add a Todo",
+    key="Add",
+)
 list_box = sg.Listbox(
     values=functions.get_todos(), key="todos", enable_events=True, size=(45, 10)
 )
 edit_button = sg.Button("Edit")
-complete_button = sg.Button("Complete")
+complete_button = sg.Button(
+    size=2,
+    image_source="button_images/complete.png",
+    mouseover_colors="LightBlue2",
+    tooltip="Complete a Todo",
+    key="Complete",
+)
 exit_button = sg.Button("Exit")
 
 window = sg.Window(
@@ -35,7 +48,7 @@ while True:
         case "Add":
             todos = functions.get_todos()
             if values["todo"] == "":
-                sg.popup("Type in a to-do.")
+                sg.popup("Type in a non-empty to-do.", font=sg_font, title=popup_title)
             else:
                 new_todo = values["todo"] + "\n"
                 todos.append(new_todo)
@@ -51,7 +64,9 @@ while True:
                 functions.write_todos(todos)
                 window["todos"].update(values=todos)
             except IndexError:
-                sg.popup("Please select an item first!", font=sg_font)
+                sg.popup(
+                    "Please select an item first.", font=sg_font, title=popup_title
+                )
         case "Complete":
             try:
                 todo_to_complete = values["todos"][0]
@@ -61,7 +76,9 @@ while True:
                 window["todos"].update(values=todos)
                 window["todo"].update(value="")
             except IndexError:
-                sg.popup("Please select an item first!", font=sg_font)
+                sg.popup(
+                    "Please select an item first.", font=sg_font, title=popup_title
+                )
         case "Exit":
             break
         case "todos":
