@@ -1,5 +1,5 @@
-clean
-throw
-break
-fix me!
-play
+Clean
+Throw
+Break
+Fix me!
+Play
